@@ -1,0 +1,19 @@
+[MAIN]
+ignore-patterns=^migrations$,^gcm-diagnose\.log$
+ignore-paths=.*\\migrations\\.*
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    invalid-name,
+    mixed-line-endings,
+    trailing-newlines
+
+[FORMAT]
+max-line-length=100
+
+[TYPECHECK]
+generated-members=objects,SUCCESS

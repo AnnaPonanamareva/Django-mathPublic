@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Главная | Азбука математики{% endblock %}
+
+{% block content %}
+<section class="hero-card">
+    <h1>Выберите тему для тренировки</h1>
+</section>
+
+<section class="topics-grid">
+    {% for topic in topics %}
+    <article class="panel-card topic-card">
+        <p class="card-label">Тема</p>
+        <h2>{{ topic.name }}</h2>
+        <p>{{ topic.description|default:"Описание темы пока не заполнено." }}</p>
+        <a class="button button-primary" href="{% url 'trainer:topic' topic.slug %}">Открыть тему</a>
+    </article>
+    {% empty %}
+    <article class="panel-card">
+        <h2>Тем пока нет</h2>
+        <p>Добавьте первую тему в админке, чтобы она появилась на главной странице.</p>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

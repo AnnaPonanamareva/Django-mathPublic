@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Тесты | {{ topic.name }}{% endblock %}
+
+{% block content %}
+<section class="hero-card">
+    <p class="eyebrow">Режим</p>
+    <h1>Тесты: {{ topic.name }}</h1>
+    <p class="lead">
+        Выберите вариант ответа и отправьте форму. Вся логика проверки работает на сервере.
+    </p>
+</section>
+
+{% if question %}
+<section class="panel-card exercise-card">
+    <div class="exercise-head">
+        <p class="card-label">Вопрос {{ current_number }} из {{ questions_count }}</p>
+        <h2>{{ question.text }}</h2>
+    </div>
+
+    {% if feedback_message %}
+    <div class="feedback-box feedback-{{ feedback_class }}">
+        {{ feedback_message }}
+    </div>
+    {% endif %}
+
+    {% if phase == "answer" %}
+    <form method="post" class="exercise-form">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="answer">
+        <div class="options-list">
+            {% for variant in question.variants.all %}
+            <label class="option-item">
+                <input type="radio" name="variant" value="{{ variant.value }}" {% if selected_variant == variant.value %}checked{% endif %}>
+                <span>{{ variant.value }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="button button-primary">Ответить</button>
+    </form>
+    {% elif phase == "incorrect" %}
+    <form method="post" class="exercise-actions">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="show_answer">
+        <button type="submit" class="button button-danger">Показать правильный ответ</button>
+    </form>
+    {% else %}
+    <form method="post" class="exercise-actions">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="next">
+        <button type="submit" class="button button-success">Следующий вопрос</button>
+    </form>
+    {% endif %}
+</section>
+{% else %}
+<section class="panel-card">
+    <h2>Тесты пока не добавлены</h2>
+    <p>Заполните вопросы в админке или через команду стартовых данных.</p>
+</section>
+{% endif %}
+
+<a class="button button-secondary" href="{% url 'trainer:topic' topic.slug %}">Назад к теме</a>
+{% endblock %}

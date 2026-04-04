@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Задания | {{ topic.name }}{% endblock %}
+
+{% block content %}
+<section class="hero-card">
+    <p class="eyebrow">Режим</p>
+    <h1>Задания: {{ topic.name }}</h1>
+    <p class="lead">
+        Введите числовой ответ в поле и отправьте форму. Проверка выполняется на сервере.
+    </p>
+</section>
+
+{% if question %}
+<section class="panel-card exercise-card">
+    <div class="exercise-head">
+        <p class="card-label">Задание {{ current_number }} из {{ questions_count }}</p>
+        <h2>{{ question.text }}</h2>
+    </div>
+
+    {% if feedback_message %}
+    <div class="feedback-box feedback-{{ feedback_class }}">
+        {{ feedback_message }}
+    </div>
+    {% endif %}
+
+    {% if phase == "answer" or phase == "incorrect" %}
+    <form method="post" class="exercise-form">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="answer">
+        <label class="field-block" for="task-answer">Ваш ответ</label>
+        <input
+            id="task-answer"
+            class="number-input"
+            type="number"
+            name="answer"
+            value="{{ entered_value }}"
+            inputmode="numeric"
+        >
+        <button type="submit" class="button button-primary">Ответить</button>
+    </form>
+    {% elif phase == "correct" %}
+    <form method="post" class="exercise-form">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <label class="field-block" for="task-answer-locked">Ваш ответ</label>
+        <input
+            id="task-answer-locked"
+            class="number-input"
+            type="number"
+            value="{{ entered_value }}"
+            disabled
+        >
+    </form>
+    <form method="post" class="exercise-actions">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="next">
+        <button type="submit" class="button button-success">Следующее задание</button>
+    </form>
+    {% else %}
+    <form method="post" class="exercise-form">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <label class="field-block" for="task-answer-revealed">Правильный ответ</label>
+        <input
+            id="task-answer-revealed"
+            class="number-input"
+            type="number"
+            value="{{ entered_value }}"
+            disabled
+        >
+    </form>
+    <form method="post" class="exercise-actions">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="next">
+        <button type="submit" class="button button-success">Следующее задание</button>
+    </form>
+    {% endif %}
+
+    {% if phase == "incorrect" %}
+    <form method="post" class="exercise-actions">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="action" value="show_answer">
+        <button type="submit" class="button button-danger">Показать ответ</button>
+    </form>
+    {% endif %}
+</section>
+{% else %}
+<section class="panel-card">
+    <h2>Задания пока не добавлены</h2>
+    <p>Заполните вопросы в админке или через команду стартовых данных.</p>
+</section>
+{% endif %}
+
+<a class="button button-secondary" href="{% url 'trainer:topic' topic.slug %}">Назад к теме</a>
+{% endblock %}

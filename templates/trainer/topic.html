@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.name }} | Азбука математики{% endblock %}
+
+{% block content %}
+<section class="hero-card">
+    <p class="eyebrow">Тема</p>
+    <h1>{{ topic.name }}</h1>
+    <p class="lead">{{ topic.description|default:"Описание темы пока не заполнено." }}</p>
+</section>
+
+<section class="formats-grid">
+    {% for item in formats %}
+    <article class="panel-card format-card">
+        <p class="card-label">{{ item.badge }}</p>
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.description }}</p>
+        {% if item.is_available %}
+        <a class="button button-primary" href="{% url item.url_name topic.slug %}">{{ item.button_text }}</a>
+        {% else %}
+        <span class="status-badge">{{ item.status }}</span>
+        {% endif %}
+    </article>
+    {% endfor %}
+</section>
+
+<a class="button button-secondary" href="{% url 'trainer:index' %}">Вернуться на главную</a>
+{% endblock %}

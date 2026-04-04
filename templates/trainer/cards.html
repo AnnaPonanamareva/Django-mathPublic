@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Карточки | {{ topic.name }}{% endblock %}
+
+{% block content %}
+<section class="hero-card">
+    <p class="eyebrow">Режим</p>
+    <h1>Карточки: {{ topic.name }}</h1>
+    <p class="lead">
+        Сначала откройте вопрос, затем покажите ответ и переходите к следующей карточке.
+    </p>
+</section>
+
+{% if card %}
+<section class="panel-card flash-card">
+    <div class="exercise-head">
+        <p class="card-label">Карточка {{ current_number }} из {{ cards_count }}</p>
+        <h2>{{ card.question }}</h2>
+    </div>
+
+    {% if phase == "revealed" %}
+    <div class="answer-card">
+        <p class="card-label">Ответ</p>
+        <p class="answer-text">{{ card.answer }}</p>
+    </div>
+    {% endif %}
+
+    <div class="card-actions">
+        {% if phase == "question" %}
+        <form method="post" class="exercise-actions">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="show_answer">
+            <button type="submit" class="button button-primary">Показать ответ</button>
+        </form>
+        {% endif %}
+
+        <form method="post" class="exercise-actions">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="next">
+            <button type="submit" class="button button-success">Следующая карточка</button>
+        </form>
+    </div>
+</section>
+{% else %}
+<section class="panel-card">
+    <h2>Карточки пока не добавлены</h2>
+    <p>Заполните карточки в админке или через команду стартовых данных.</p>
+</section>
+{% endif %}
+
+<a class="button button-secondary" href="{% url 'trainer:topic' topic.slug %}">Назад к теме</a>
+{% endblock %}
