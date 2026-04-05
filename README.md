@@ -10,12 +10,12 @@
 1. Клонировать репозиторий или скачать архив с репозиторием
 2. В командной строке/терминале:
 - перейти в директорию Django-mathPublic-main
-- Создать виртуальное окружение
+- Создать виртуальное окружение<br>
 python -m venv venv
 - Активировать окружение
 venv\Scripts\activate
-- Установить зависимости
-pip install -r requirements.txt.
+- Установить зависимости<br>
+pip install -r requirements.txt<br>
 Если файла requirements.txt нет:
 pip install django
 - Применить миграции:<br>
