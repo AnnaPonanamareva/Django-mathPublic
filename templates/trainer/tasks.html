@@ -27,17 +27,15 @@
     {% if phase == "answer" or phase == "incorrect" %}
     <form method="post" class="exercise-form">
         {% csrf_token %}
-        <input type="hidden" name="question_id" value="{{ question.id }}">
         <input type="hidden" name="action" value="answer">
-        <label class="field-block" for="task-answer">Ваш ответ</label>
-        <input
-            id="task-answer"
-            class="number-input"
-            type="number"
-            name="answer"
-            value="{{ entered_value }}"
-            inputmode="numeric"
-        >
+        {{ form.question_id }}
+        <label class="field-block" for="{{ form.answer.id_for_label }}">Ваш ответ</label>
+        {{ form.answer }}
+        {% if form.answer.errors %}
+        <div class="feedback-box feedback-error">
+            {{ form.answer.errors|join:", " }}
+        </div>
+        {% endif %}
         <button type="submit" class="button button-primary">Ответить</button>
     </form>
     {% elif phase == "correct" %}
@@ -49,7 +47,7 @@
             id="task-answer-locked"
             class="number-input"
             type="number"
-            value="{{ entered_value }}"
+            value="{{ form.answer.value }}"
             disabled
         >
     </form>
@@ -68,7 +66,7 @@
             id="task-answer-revealed"
             class="number-input"
             type="number"
-            value="{{ entered_value }}"
+            value="{{ revealed_answer }}"
             disabled
         >
     </form>

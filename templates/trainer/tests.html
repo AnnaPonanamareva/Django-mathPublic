@@ -27,13 +27,23 @@
     {% if phase == "answer" %}
     <form method="post" class="exercise-form">
         {% csrf_token %}
-        <input type="hidden" name="question_id" value="{{ question.id }}">
         <input type="hidden" name="action" value="answer">
+        {{ form.question_id }}
+        {% if form.non_field_errors %}
+        <div class="feedback-box feedback-error">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        {% if form.variant.errors %}
+        <div class="feedback-box feedback-error">
+            {{ form.variant.errors|join:", " }}
+        </div>
+        {% endif %}
         <div class="options-list">
-            {% for variant in question.variants.all %}
+            {% for choice in form.variant %}
             <label class="option-item">
-                <input type="radio" name="variant" value="{{ variant.value }}" {% if selected_variant == variant.value %}checked{% endif %}>
-                <span>{{ variant.value }}</span>
+                {{ choice.tag }}
+                <span>{{ choice.choice_label }}</span>
             </label>
             {% endfor %}
         </div>
