@@ -18,7 +18,7 @@ venv\Scripts\activate
 pip install -r requirements.txt.
 Если файла requirements.txt нет:
 pip install django
-- Применить миграции:
+- Применить миграции:<br>
 python manage.py migrate<br>
 python manage.py seed_trainer<br>
 python manage.py runserver;
