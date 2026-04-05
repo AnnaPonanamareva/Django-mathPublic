@@ -15,13 +15,13 @@ python -m venv venv
 - Активировать окружение
 venv\Scripts\activate
 - Установить зависимости
-pip install -r requirements.txt
+pip install -r requirements.txt.
 Если файла requirements.txt нет:
 pip install django
-- Применить миграции
-python manage.py migrate
-python manage.py seed_trainer
-python manage.py runserver
+- Применить миграции:
+python manage.py migrate;
+python manage.py seed_trainer;
+python manage.py runserver;
 - Запустить сервер
 python manage.py runserver
 - Открыть в браузере
